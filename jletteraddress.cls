@@ -68,12 +68,51 @@
 \def\senderaddressa#1{\gdef\@senderaddressa{#1}}
 \def\senderaddressb#1{\gdef\@senderaddressb{#1}}
 
+\newcount\@receivercount
+\newcommand{\@receiverfontsize}{27pt}
+\newcommand{\@receiverbaselineskip}{32pt}
+\newcommand{\@receiverx}{50}
+
+\newcommand{\@ifempty}[3]{%
+  \if\relax\detokenize{#1}\relax
+    #2%
+  \else
+    #3%
+  \fi
+}
+
+\newcommand{\@addreceivercount}[1]{%
+  \@ifempty{#1}{}{\advance\@receivercount by 1\relax}%
+}
+
+\newcommand{\@receiverlayout}[4]{%
+  \@receivercount=0\relax
+  \@addreceivercount{#1}%
+  \@addreceivercount{#2}%
+  \@addreceivercount{#3}%
+  \@addreceivercount{#4}%
+  \ifnum\@receivercount=1
+    \def\@receiverfontsize{27pt}%
+    \def\@receiverbaselineskip{32pt}%
+    \def\@receiverx{50}%
+  \else\ifnum\@receivercount=2
+    \def\@receiverfontsize{24pt}%
+    \def\@receiverbaselineskip{29pt}%
+    \def\@receiverx{48}%
+  \else\ifnum\@receivercount=3
+    \def\@receiverfontsize{22pt}%
+    \def\@receiverbaselineskip{26pt}%
+    \def\@receiverx{46}%
+  \else
+    \def\@receiverfontsize{20pt}%
+    \def\@receiverbaselineskip{24pt}%
+    \def\@receiverx{44}%
+  \fi\fi\fi
+}
+
 %% Receiver helpers
 \newcommand{\@receiverline}[2]{%%
-  \if\relax\detokenize{#1}\relax
-  \else
-    \leavevmode#1\hskip1zw#2\par
-  \fi
+  \@ifempty{#1}{}{\leavevmode#1\hskip1zw#2\par}%
 }
 
 \newcommand{\@formatreceivers}[5]{%%
@@ -85,30 +124,34 @@
 
 %% Make a address-side
 \NewDocumentCommand{\addaddress}{O{} O{} O{} m m m m m} {
-  % #1 : Receiver name
-  % #2 : Receiver name suffix
-  % #3 : Receiver postcode
-  % #4 : Receiver address 1
-  % #5 : Receiver address 2
+  % #1 : Additional receiver name 1 (optional)
+  % #2 : Additional receiver name 2 (optional)
+  % #3 : Additional receiver name 3 (optional)
+  % #4 : Primary receiver name
+  % #5 : Receiver name suffix
+  % #6 : Receiver postcode
+  % #7 : Receiver address 1
+  % #8 : Receiver address 2
   \refstepcounter{section}
   \addcontentsline{toc}{section}{#4}
+  \@receiverlayout{#4}{#1}{#2}{#3}%
   \noindent %
   \begin{picture}(100,148)(0,0)%
     \put(43,136){ %
       \vtop to 8truemm{\vfil\hbox{\fontsize{15pt}{0pt}\selectfont%
-    \hbox to 7truemm{\hfil\StrChar{#6}{1}\hfil}%
-    \hbox to 7truemm{\hfil\StrChar{#6}{2}\hfil}%
-    \hbox to 7truemm{\hfil\StrChar{#6}{3}\hfil}\hskip0.4truemm
-    \hbox to 6.8truemm{\hfil\StrChar{#6}{4}\hfil}%
-    \hbox to 6.8truemm{\hfil\StrChar{#6}{5}\hfil}%
-    \hbox to 6.8truemm{\hfil\StrChar{#6}{6}\hfil}%
-    \hbox to 6.8truemm{\hfil\StrChar{#6}{7}\hfil}%
+        \hbox to 7truemm{\hfil\StrChar{#6}{1}\hfil}%
+        \hbox to 7truemm{\hfil\StrChar{#6}{2}\hfil}%
+        \hbox to 7truemm{\hfil\StrChar{#6}{3}\hfil}\hskip0.4truemm
+        \hbox to 6.8truemm{\hfil\StrChar{#6}{4}\hfil}%
+        \hbox to 6.8truemm{\hfil\StrChar{#6}{5}\hfil}%
+        \hbox to 6.8truemm{\hfil\StrChar{#6}{6}\hfil}%
+        \hbox to 6.8truemm{\hfil\StrChar{#6}{7}\hfil}%
     }\vfil}}
   \put(83,120){\fontsize{15pt}{0pt}\selectfont%
     \parbox<t>[t]{90truemm}{#7}}
   \put(75,120){\fontsize{15pt}{0pt}\selectfont%
     \parbox<t>[t]{90truemm}{\hfil#8}}
-  \put(50,120){\kanjiskip=.3zw\fontsize{27pt}{0pt}\selectfont%
+    \put(\@receiverx,120){\kanjiskip=.3zw\fontsize{\@receiverfontsize}{\@receiverbaselineskip}\selectfont%
     \parbox<t>[t]{90truemm}{\centering\@formatreceivers{#4}{#1}{#2}{#3}{#5}}\hfil}
     \put(25,85){\fontsize{12pt}{0pt}\selectfont%
         \parbox<t>[t]{55truemm}{\@senderaddressa}}
