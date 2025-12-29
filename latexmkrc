@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+$out_dir = 'out';
 $latex= 'uplatex %O -interaction=nonstopmode -shell-escape %B';
 $pdflatex='lualatex %O -interaction=nonstopmode -shell-escape %B';
 $bibtex = 'pbibtex %O -kanji=utf8 %B';
