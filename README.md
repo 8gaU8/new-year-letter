@@ -31,6 +31,9 @@ docker compose up
 
 If you want to know more details please see https://qiita.com/yyu/items/defa9eb6d4cf5e797270.
 
+## Printer settings
+![Printer settings](./assets/print-setting.png)
+
 ## References
 
 - https://github.com/ueokande/jletteraddress
