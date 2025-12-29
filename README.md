@@ -11,7 +11,7 @@
 
 1. Install [Docker](https://www.docker.com) and `docker-compose`
 2. Run `docker-compose build`
-3. Edit & Run [scripts/build.sh](scripts/build.sh)
+3. Edit & Run [./build.sh](build.sh)
 ```bash
 # scripts/build.sh
 
