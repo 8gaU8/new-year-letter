@@ -28,6 +28,7 @@
 
 \usepackage{plext}
 \usepackage{xstring}
+\usepackage{xparse}
 \ifx\kanjiskip\undefined\else
   \usepackage{atbegshi}
   \ifx\ucs\undefined
@@ -67,33 +68,48 @@
 \def\senderaddressa#1{\gdef\@senderaddressa{#1}}
 \def\senderaddressb#1{\gdef\@senderaddressb{#1}}
 
+%% Receiver helpers
+\newcommand{\@receiverline}[2]{%%
+  \if\relax\detokenize{#1}\relax
+  \else
+    \leavevmode#1\hskip1zw#2\par
+  \fi
+}
+
+\newcommand{\@formatreceivers}[5]{%%
+  \@receiverline{#1}{#5}%% primary name
+  \@receiverline{#2}{#5}%% optional name 2
+  \@receiverline{#3}{#5}%% optional name 3
+  \@receiverline{#4}{#5}%% optional name 4
+}
+
 %% Make a address-side
-\newcommand{\addaddress}[5] {
+\NewDocumentCommand{\addaddress}{O{} O{} O{} m m m m m} {
   % #1 : Receiver name
   % #2 : Receiver name suffix
   % #3 : Receiver postcode
   % #4 : Receiver address 1
   % #5 : Receiver address 2
   \refstepcounter{section}
-  \addcontentsline{toc}{section}{#1}
+  \addcontentsline{toc}{section}{#4}
   \noindent %
   \begin{picture}(100,148)(0,0)%
     \put(43,136){ %
       \vtop to 8truemm{\vfil\hbox{\fontsize{15pt}{0pt}\selectfont%
-        \hbox to 7truemm{\hfil\StrChar{#3}{1}\hfil}%
-        \hbox to 7truemm{\hfil\StrChar{#3}{2}\hfil}%
-        \hbox to 7truemm{\hfil\StrChar{#3}{3}\hfil}\hskip0.4truemm
-        \hbox to 6.8truemm{\hfil\StrChar{#3}{4}\hfil}%
-        \hbox to 6.8truemm{\hfil\StrChar{#3}{5}\hfil}%
-        \hbox to 6.8truemm{\hfil\StrChar{#3}{6}\hfil}%
-        \hbox to 6.8truemm{\hfil\StrChar{#3}{7}\hfil}%
+    \hbox to 7truemm{\hfil\StrChar{#6}{1}\hfil}%
+    \hbox to 7truemm{\hfil\StrChar{#6}{2}\hfil}%
+    \hbox to 7truemm{\hfil\StrChar{#6}{3}\hfil}\hskip0.4truemm
+    \hbox to 6.8truemm{\hfil\StrChar{#6}{4}\hfil}%
+    \hbox to 6.8truemm{\hfil\StrChar{#6}{5}\hfil}%
+    \hbox to 6.8truemm{\hfil\StrChar{#6}{6}\hfil}%
+    \hbox to 6.8truemm{\hfil\StrChar{#6}{7}\hfil}%
     }\vfil}}
-    \put(83,120){\fontsize{15pt}{0pt}\selectfont%
-        \parbox<t>[t]{90truemm}{#4}}
-    \put(75,120){\fontsize{15pt}{0pt}\selectfont%
-        \parbox<t>[t]{90truemm}{\hfil#5}}
-    \put(50,120){\kanjiskip=.3zw\fontsize{27pt}{0pt}\selectfont%
-        \parbox<t>[t]{90truemm}{\hfil#1\hskip1zw#2}\hfil}
+  \put(83,120){\fontsize{15pt}{0pt}\selectfont%
+    \parbox<t>[t]{90truemm}{#7}}
+  \put(75,120){\fontsize{15pt}{0pt}\selectfont%
+    \parbox<t>[t]{90truemm}{\hfil#8}}
+  \put(50,120){\kanjiskip=.3zw\fontsize{27pt}{0pt}\selectfont%
+    \parbox<t>[t]{90truemm}{\centering\@formatreceivers{#4}{#1}{#2}{#3}{#5}}\hfil}
     \put(25,85){\fontsize{12pt}{0pt}\selectfont%
         \parbox<t>[t]{55truemm}{\@senderaddressa}}
     \put(18,85){\fontsize{12pt}{0pt}\selectfont%
