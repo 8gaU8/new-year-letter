@@ -137,7 +137,7 @@
   \@receiverlayout{#4}{#1}{#2}{#3}%
   \noindent %
   \begin{picture}(100,148)(0,0)%
-    \put(43,136){ %
+    \put(43,139){ %
       \vtop to 8truemm{\vfil\hbox{\fontsize{15pt}{0pt}\selectfont%
         \hbox to 7truemm{\hfil\StrChar{#6}{1}\hfil}%
         \hbox to 7truemm{\hfil\StrChar{#6}{2}\hfil}%
