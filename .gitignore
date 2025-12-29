@@ -1,3 +1,5 @@
+address.tex
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
@@ -759,7 +761,8 @@ TSWLatexianTemp*
 __MACOSX/
 .AppleDouble
 .LSOverride
-Icon[]
+Icon[
+]
 
 # Thumbnails
 ._*
